@@ -5,14 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>粒子圣诞树 · 晨蓝与紫罗兰</title>
 <style>
-  html, body { margin: 0; height: 100%; background: #04050f; overflow: hidden; }
+  html, body { margin: 0; height: 100%; background: #050505; overflow: hidden; }
   #c { display: block; width: 100vw; height: 100vh; cursor: crosshair; }
   #hint {
     position: fixed; left: 50%; bottom: 18px; transform: translateX(-50%);
     font: 12.5px/1.6 ui-sans-serif, "Segoe UI", "Microsoft YaHei", system-ui, sans-serif;
-    letter-spacing: .22em; color: #9fc4ee; opacity: .5;
+    letter-spacing: .22em; color: #d9d2bd; opacity: .5;
     pointer-events: none; user-select: none; white-space: nowrap;
-    text-shadow: 0 0 16px rgba(120, 180, 255, .55);
+    text-shadow: 0 0 16px rgba(255, 226, 178, .45);
     transition: opacity 1s ease;
   }
   #hint.gone { opacity: 0; }
@@ -28,16 +28,16 @@
     font-size: clamp(30px, 5.4vw, 68px);
     line-height: 1.1; color: #fff7e2;
     letter-spacing: .03em;
-    text-shadow: 0 0 20px rgba(255, 228, 150, .60),
-                 0 0 54px rgba(255, 198, 112, .32);
+    text-shadow: 0 0 20px rgba(255, 236, 200, .62),
+                 0 0 54px rgba(246, 208, 198, .34);
   }
   #title .l2 {
     margin-top: .5em;
     font-family: "STKaiti", "KaiTi", "Kaiti SC", "Songti SC", "SimSun", serif;
     font-size: clamp(13px, 1.6vw, 21px);
-    line-height: 1.8; color: rgba(216, 240, 255, .94);
+    line-height: 1.8; color: rgba(240, 236, 222, .94);
     letter-spacing: .38em; text-indent: .38em;
-    text-shadow: 0 0 14px rgba(150, 220, 255, .50);
+    text-shadow: 0 0 14px rgba(255, 225, 180, .45);
   }
   #title span { display: inline-block; will-change: transform, opacity, filter; }
   /* 背景音乐按钮 */
@@ -45,27 +45,89 @@
     position: fixed; right: 16px; bottom: 16px; height: 40px; padding: 0 15px;
     display: none; align-items: center; justify-content: center; gap: 6px;
     border-radius: 20px;
-    border: 1px solid rgba(160, 210, 255, .45);
-    background: rgba(12, 22, 46, .62); color: #d6ebff;
+    border: 1px solid rgba(255, 238, 215, .40);
+    background: rgba(18, 17, 15, .60); color: #f3ecdf;
     font: 13px/1 ui-sans-serif, "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
     letter-spacing: .06em;
     cursor: pointer; user-select: none; -webkit-tap-highlight-color: transparent;
-    box-shadow: 0 0 20px rgba(90, 160, 255, .35);
+    box-shadow: 0 0 20px rgba(255, 210, 150, .28);
     transition: opacity .5s ease, transform .18s ease, border-color .2s ease;
   }
   #mbtn.ready { animation: mgLow 2.6s ease-in-out infinite; }
   @keyframes mgLow {
-    0%, 100% { box-shadow: 0 0 16px rgba(90, 160, 255, .28); }
-    50%      { box-shadow: 0 0 26px rgba(150, 205, 255, .62); }
+    0%, 100% { box-shadow: 0 0 16px rgba(255, 210, 150, .24); }
+    50%      { box-shadow: 0 0 26px rgba(255, 232, 190, .58); }
   }
-  #mbtn:hover { transform: scale(1.04); border-color: rgba(190, 225, 255, .78); }
+  #mbtn:hover { transform: scale(1.04); border-color: rgba(255, 240, 214, .78); }
   #mbtn.off { opacity: .55; }
+
+  /* 许愿浮窗（胶囊） */
+  #wish { position: fixed; left: 0; right: 0; top: 50%; transform: translateY(-50%);
+          display: none; justify-content: center; z-index: 6; }
+  #wish .wcard {
+    min-width: 268px; max-width: 88vw; padding: 19px 26px 14px;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 238, 215, .38);
+    background: rgba(20, 19, 17, .56);
+    -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+    box-shadow: 0 0 34px rgba(255, 224, 176, .16), inset 0 0 22px rgba(255, 240, 214, .06);
+    text-align: center;
+    opacity: 0; transform: scale(.88);
+    transition: opacity .75s ease, transform .85s cubic-bezier(.2,.9,.25,1);
+  }
+  #wish.on .wcard { opacity: 1; transform: scale(1); }
+  #wish .wt {
+    font-family: "STKaiti", "KaiTi", "Kaiti SC", "Songti SC", serif;
+    font-size: 21px; letter-spacing: .30em; text-indent: .30em;
+    color: #fff3e0; text-shadow: 0 0 18px rgba(255, 214, 158, .55);
+  }
+  #wish .wrow { margin-top: 9px; display: flex; align-items: center; justify-content: center; gap: 9px; }
+  #win {
+    width: 170px; padding: 7px 3px 6px;
+    border: none; border-bottom: 1px solid rgba(255, 238, 215, .34);
+    background: transparent; outline: none;
+    color: #fff6e8; font: 16px/1.4 "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+    letter-spacing: .06em; text-align: center;
+  }
+  #win::placeholder { color: rgba(255, 240, 220, .34); letter-spacing: .10em; }
+  #wgo {
+    padding: 7px 15px; border-radius: 999px; cursor: pointer;
+    border: 1px solid rgba(255, 238, 215, .46);
+    background: rgba(255, 238, 215, .10); color: #fff3e0;
+    font: 13px/1 "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+    letter-spacing: .14em; text-indent: .14em;
+    -webkit-tap-highlight-color: transparent;
+    transition: background .2s ease;
+  }
+  #wgo:hover { background: rgba(255, 238, 215, .22); }
+  #wish .wtn {
+    margin-top: 8px; font: 10.5px/1.5 "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+    color: rgba(255, 240, 222, .40); letter-spacing: .10em;
+  }
+  #wish.out .wcard { opacity: 0; transform: scale(.02);
+    transition: opacity .5s ease, transform .62s cubic-bezier(.5,0,.75,0); }
+  #wish.shake .wcard { animation: wshake .42s ease; }
+  @keyframes wshake {
+    0%, 100% { transform: translateX(0); }
+    25%      { transform: translateX(-6px); }
+    75%      { transform: translateX(6px); }
+  }
 </style>
 </head>
 <body>
 <canvas id="c"></canvas>
 <div id="title"><div class="l1"></div><div class="l2"></div></div>
 <div id="hint">点击任意处 · 星屑迸散</div>
+<div id="wish">
+  <div class="wcard">
+    <div class="wt">许个愿吧</div>
+    <div class="wrow">
+      <input id="win" maxlength="18" autocomplete="off" placeholder="写下你的愿望">
+      <button id="wgo" type="button">确认</button>
+    </div>
+    <div class="wtn">确认后不可更改 · 只能许一次</div>
+  </div>
+</div>
 <audio id="bgm" loop preload="auto" playsinline></audio>
 <button id="mbtn" aria-label="背景音乐">♪ 音乐</button>
 <script>
@@ -123,11 +185,11 @@
 
   /* ---------------- 调色：晨蓝 → 紫罗兰 ---------------- */
   var RAMP = [
-    [0.00, [ 66, 238, 255]],   // 清晨蓝（更艳）
-    [0.25, [ 92, 196, 255]],
-    [0.50, [124, 148, 255]],   // 长春花
-    [0.75, [168, 110, 255]],   // 紫罗兰
-    [1.00, [212, 126, 255]]    // 淡紫
+    [0.00, [ 70, 130, 148]],   // 深青绿偏蓝
+    [0.32, [100, 166, 188]],
+    [0.58, [148, 196, 222]],   // 雾蓝过渡
+    [0.80, [204, 166, 198]],   // 藕荷粉（粉里带蓝）
+    [1.00, [224, 202, 196]]    // 冷奶油（偏灰蓝的白）
   ];
   function rampAt(h) {
     h = clamp(h, 0, 1);
@@ -158,32 +220,32 @@
   for (var pi = 0; pi < 8; pi++) {
     var base = rampAt(pi / 7);
     COLORS.push(rgbStr(whitened(base, 0.02)));
-    COLORS.push(rgbStr(whitened(base, 0.30)));
+    COLORS.push(rgbStr(whitened(base, 0.18)));
   }
   // 同冷色系的点缀色：冰蓝 / 薄荷 / 极光青
-  var COOL_COLORS = ["#7ff6ff", "#a6e6ff", "#bcd6ff", "#8ff5e2", "#d2f6ff"];
+  var COOL_COLORS = ["#C3E3E0", "#CFE2E9", "#DAF1F1", "#A8D8C8", "#FBF2E2"];
   var IDX_COOL = COLORS.length;
   var COOL_N = COOL_COLORS.length;
   for (var co = 0; co < COOL_N; co++) COLORS.push(COOL_COLORS[co]);
   var IDX_TREE = COLORS.length;                       // 星与法阵的颜色起点
-  var STAR_COLORS = ["#fffbe6", "#ffefae", "#ffe07f", "#fffdf6"];
+  var STAR_COLORS = ["#FFF6E2", "#FFE7BF", "#F7D2A8", "#FFFFFF"];
   for (var si = 0; si < STAR_COLORS.length; si++) COLORS.push(STAR_COLORS[si]);
-  var CIRCLE_COLORS = ["#aecbe0", "#d6e7f4", "#8fb4ce"];
+  var CIRCLE_COLORS = ["#9EC2B2", "#D8E8DE", "#88B2A2"];
   for (var ci2 = 0; ci2 < CIRCLE_COLORS.length; ci2++) COLORS.push(CIRCLE_COLORS[ci2]);
   // 树上挂的彩球：暖金 / 蜜桃 / 淡紫 / 冰蓝 / 樱粉
-  var BALL_COLORS = ["#ffefb8", "#ffd8c8", "#dcc8ff", "#c6ecff", "#ffe0f0"];
+  var BALL_COLORS = ["#FFF3E2", "#F6D0C6", "#CFE2E9", "#B7D8C8", "#EADFCB"];
   var IDX_BALL = COLORS.length;
   for (var ba2 = 0; ba2 < BALL_COLORS.length; ba2++) COLORS.push(BALL_COLORS[ba2]);
   // 环绕灯带：暖金为主 + 少量糖色点缀，避免和冷色树体混在一起
   var BAND_COLORS = [
-    "#ffd75e", "#ffb347", "#ff9ec4", "#7dffc6",   // 金 / 蜜橘 / 樱粉 / 薄荷
-    "#7fd4ff", "#c39cff", "#fff6c8", "#fffdf2"    // 冰蓝 / 淡紫 / 暖白
+    "#E9C29C", "#D9A87E", "#F2D6B8", "#FFEED6",   // 香槟金 / 蜜杏 / 浅杏 / 奶油
+    "#DCCBB0", "#C9B394", "#F6D0C6", "#FFF6E4"    // 亚麻 / 燕麦 / 胭脂 / 象牙
   ];
   var IDX_BAND = COLORS.length;
   for (var bi = 0; bi < BAND_COLORS.length; bi++) COLORS.push(BAND_COLORS[bi]);
 
   // 法阵点缀色：灰蓝紫（六芒星 A）/ 灰青（六芒星 B）/ 暖灰金（符文）
-  var DECO_COLORS = ["#ffc4e2", "#ffa8d0", "#e0d8bf"];
+  var DECO_COLORS = ["#E4A9BE", "#F2C6D6", "#CBB79A"];
   var IDX_DECO = COLORS.length;
   for (var dc = 0; dc < DECO_COLORS.length; dc++) COLORS.push(DECO_COLORS[dc]);
 
@@ -217,9 +279,9 @@
     sprites = [];
     for (var i = 0; i < COLORS.length; i++) {
       sprites.push(makeSprite(parseColor(COLORS[i]),
-        i >= IDX_DECO ? "rgba(238,246,255,0.92)"
-        : (i >= IDX_BAND ? "rgba(255,243,196,1)"
-        : (i >= IDX_TREE + 4 && i <= IDX_TREE + 6 ? "rgba(228,242,252,0.95)" : null))));
+        i >= IDX_DECO ? "rgba(255,248,238,0.94)"
+        : (i >= IDX_BAND ? "rgba(255,240,214,1)"
+        : (i >= IDX_TREE + 4 && i <= IDX_TREE + 6 ? "rgba(226,240,232,0.95)" : null))));
     }
   }
 
@@ -711,18 +773,18 @@
     bgX.setTransform(DPR, 0, 0, DPR, 0, 0);
 
     var g = bgX.createLinearGradient(0, 0, 0, H);
-    g.addColorStop(0, "#05061a");
-    g.addColorStop(0.45, "#080a20");
-    g.addColorStop(0.78, "#0a0a24");
-    g.addColorStop(1, "#05060f");
+    g.addColorStop(0, "#05070a");
+    g.addColorStop(0.45, "#080a0c");
+    g.addColorStop(0.78, "#0a0a08");
+    g.addColorStop(1, "#050505");
     bgX.fillStyle = g;
     bgX.fillRect(0, 0, W, H);
 
     // 星云
     var neb = [
-      [cx - W * 0.20, H * 0.26, W * 0.44, "rgba(70,120,255,0.055)"],
-      [cx + W * 0.20, H * 0.44, W * 0.38, "rgba(150,80,255,0.055)"],
-      [cx, groundY, W * 0.48, "rgba(60,200,255,0.05)"]
+      [cx - W * 0.20, H * 0.26, W * 0.44, "rgba(136,178,162,0.055)"],
+      [cx + W * 0.20, H * 0.44, W * 0.38, "rgba(246,208,198,0.048)"],
+      [cx, groundY, W * 0.48, "rgba(206,226,233,0.045)"]
     ];
     bgX.globalCompositeOperation = "lighter";
     for (var i = 0; i < neb.length; i++) {
@@ -736,8 +798,8 @@
 
     // 树体背光：底部晨蓝、顶部紫罗兰
     var tint = [
-      [cx, groundY - treeH * 0.10, R0 * 1.65, "rgba(80,220,255,0.14)"],
-      [cx, apexY + treeH * 0.26, R0 * 1.25, "rgba(196,138,255,0.15)"],
+      [cx, groundY - treeH * 0.10, R0 * 1.65, "rgba(136,178,162,0.15)"],
+      [cx, apexY + treeH * 0.26, R0 * 1.25, "rgba(255,239,215,0.13)"],
       [cx, groundY - treeH * 0.45, R0 * 0.95, "rgba(255,255,255,0.05)"]
     ];
     for (var ti = 0; ti < tint.length; ti++) {
@@ -1087,7 +1149,7 @@
       // 前后半圈明暗（近处更亮）
       var depth = 0.35 + 0.65 * ((Math.sin(ca) + 1) * 0.5);
       var tw = 0.6 + 0.4 * Math.sin(t * p.tw + p.ph);
-      var a = p.a * tw * depth * pulse * mul;
+      var a = p.a * tw * depth * pulse * mul * 0.90;
       if (a <= 0.012) continue;
       if (p.g) {
         pX.globalAlpha = Math.min(1, a * 1.4);
@@ -1304,6 +1366,128 @@
       c.el.style.filter = blur > 0.15 ? "blur(" + blur.toFixed(1) + "px)" : "none";
     }
   }
+
+  /* ---------------- 许愿 ---------------- */
+  var wishBox = document.getElementById("wish");
+  var wishIn = document.getElementById("win");
+  var wishGo = document.getElementById("wgo");
+  var WISH_KEY = "xmas_wish_v1";
+  var wishState = 0;        // 0 未出现 / 1 输入中 / 2 已许愿
+  var wishReplay = false;   // 已许过愿的访客：进场后重放烟花
+  var wishT = -99;          // 许愿完成的时刻
+  var wishText = "";
+  var fws = [], fwActive = false, fwElapsed = 0, fwNext = 0, fwRise = null;
+
+  try {
+    var savedWish = window.localStorage && window.localStorage.getItem(WISH_KEY);
+    if (savedWish) { wishText = savedWish; wishState = 2; wishT = -99; wishReplay = true; }
+  } catch (e0) { /* 隐私模式忽略 */ }
+
+  function wishShow() {
+    if (wishState !== 0 || !wishBox) return;
+    wishState = 1;
+    if (hint) hint.classList.add("gone");
+    wishBox.style.display = "flex";
+    void wishBox.offsetWidth;
+    wishBox.classList.add("on");
+  }
+
+  function wishShake() {
+    if (!wishBox) return;
+    wishBox.classList.add("shake");
+    setTimeout(function () { wishBox.classList.remove("shake"); }, 460);
+  }
+
+  function fwBurst(x, y, n, sp0, sp1, big) {
+    var base = Math.random() < 0.55
+      ? (IDX_BAND + ((Math.random() * 4) | 0))          // 香槟金系
+      : (IDX_BAND + 4 + ((Math.random() * 4) | 0));     // 亚麻/胭脂系
+    for (var i = 0; i < n; i++) {
+      var a = rnd(0, TAU), sp = rnd(sp0, sp1) * (big ? 1.0 : 0.78);
+      fws.push({
+        x: x, y: y,
+        vx: Math.cos(a) * sp, vy: Math.sin(a) * sp * 0.92,
+        life: rnd(1.0, 2.0) * (big ? 1.15 : 0.95), age: 0,
+        s: rnd(1.3, 2.9),
+        ci: (Math.random() < 0.72 ? base : (IDX_TREE + ((Math.random() * 4) | 0)))
+      });
+    }
+  }
+
+  function wishFire() {
+    fwActive = true; fwElapsed = 0; fwNext = 0.02;
+    fwRise = { x: cx, y: H * 0.52, y1: H * 0.26, t: 0, dur: 0.62 };
+  }
+
+  function wishSubmit() {
+    if (wishState !== 1) return;
+    var v = wishIn ? (wishIn.value || "").replace(/\s+/g, " ").trim() : "";
+    if (!v) { wishShake(); return; }
+    wishText = v.slice(0, 18);
+    wishState = 2;
+    wishT = introT;
+    try { if (window.localStorage) window.localStorage.setItem(WISH_KEY, wishText); } catch (e1) {}
+    if (wishIn) { try { wishIn.blur(); } catch (e2) {} }
+    if (wishBox) {
+      wishBox.classList.add("out");
+      setTimeout(function () { wishBox.style.display = "none"; }, 740);
+    }
+    wishFire();
+  }
+
+  function updateFireworks(dt) {
+    if (fwActive) {
+      fwElapsed += dt;
+      if (fwRise) {
+        fwRise.t += dt;
+        if (fwRise.t >= fwRise.dur) {
+          fwBurst(cx, fwRise.y1, 132, 110, 340, 1);
+          fwRise = null;
+        }
+      } else if (fwElapsed < 4.4) {
+        fwNext -= dt;
+        if (fwNext <= 0) {
+          fwNext = rnd(0.20, 0.52);
+          var r = Math.random();
+          var n = r < 0.42 ? 44 : (r < 0.82 ? 88 : 150);
+          fwBurst(rnd(W * 0.12, W * 0.88), rnd(H * 0.07, H * 0.40), n, 70, 240, r > 0.6);
+        }
+      } else if (fwElapsed > 5.1) { fwActive = false; }
+    }
+    for (var i = fws.length - 1; i >= 0; i--) {
+      var q = fws[i];
+      q.age += dt;
+      if (q.age >= q.life) { fws.splice(i, 1); continue; }
+      q.vy += 62 * dt;
+      var dmp = Math.pow(0.22, dt);
+      q.vx *= dmp; q.vy *= dmp;
+      q.x += q.vx * dt; q.y += q.vy * dt;
+    }
+  }
+
+  function drawFireworks() {
+    if (fwRise) {
+      var k = 1 - fwRise.t / fwRise.dur;
+      var ry = fwRise.y + (fwRise.y1 - fwRise.y) * (1 - k * k);
+      pX.globalAlpha = 0.55 + 0.35 * k;
+      pX.drawImage(sprites[IDX_TREE + 1], fwRise.x - 15, ry - 15, 30, 30);
+      if (pX.globalCompositeOperation === "lighter") {
+        pX.globalAlpha = 0.42;
+        pX.fillStyle = COLORS[IDX_TREE + 1];
+        pX.fillRect(fwRise.x - 1, ry - 18, 2, 18);
+      }
+    }
+    for (var i = 0; i < fws.length; i++) {
+      var q = fws[i];
+      var kk = 1 - q.age / q.life;
+      var a = Math.pow(kk, 1.5) * 0.95;
+      if (a <= 0.01) continue;
+      var sz = q.s * (0.55 + 0.95 * kk) * 4.2;
+      pX.globalAlpha = a;
+      pX.drawImage(sprites[q.ci], q.x - sz * 0.5, q.y - sz * 0.5, sz, sz);
+    }
+  }
+
   /* ---------------- 主循环 ---------------- */
   function draw(t, dt) {
     rot += dt * 0.13;
@@ -1323,11 +1507,36 @@
       hintGone = true;
       if (hint) hint.classList.add("gone");
     }
+    if (wishState === 0 && introT > 9.7) wishShow();
+    if (wishReplay && introT > 9.7) { wishReplay = false; wishT = introT; wishFire(); }
 
     ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
     ctx.globalAlpha = 1;
     ctx.globalCompositeOperation = "source-over";
     ctx.drawImage(bgC, 0, 0, W, H);
+
+    // "你会如愿的"：画在背景之上、粒子之下 → 从树后若隐若现
+    if (wishState === 2) {
+      var wBase = wishT > -50 ? (introT - wishT - 5.2) : (introT - 9.4);
+      var wFade = clamp01(wBase / 2.8);
+      if (wFade > 0.004) {
+        var breath = 0.30 + 0.080 * Math.sin(t * 0.72);
+        ctx.save();
+        ctx.globalAlpha = wFade * breath;
+        ctx.fillStyle = "#fff2e0";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        var wfs = Math.max(24, Math.min(W * 0.070, 70));
+        ctx.font = wfs + 'px "STXingkai","华文行楷","STFangsong","FangSong","Songti SC","STSong",serif';
+        ctx.shadowColor = "rgba(255,226,176,0.55)";
+        ctx.shadowBlur = 20;
+        var wLine = "你会如愿的", wStep = wfs * 1.60, wY = starY - treeH * 0.100;
+        for (var wi = 0; wi < wLine.length; wi++) {
+          ctx.fillText(wLine.charAt(wi), cx + (wi - (wLine.length - 1) / 2) * wStep, wY);
+        }
+        ctx.restore();
+      }
+    }
 
     pX.setTransform(DPR, 0, 0, DPR, 0, 0);
     pX.globalCompositeOperation = "source-over";
@@ -1339,6 +1548,7 @@
     updateMeteors(dt);
     updateFlows(dt);
     updateBand(dt);
+    updateFireworks(dt);
     drawSnow(t, dt, false);
     drawMeteors();
     drawCone(cosR, sinR, t);
@@ -1350,6 +1560,7 @@
     drawCircle(t, dt);
     drawSnow(t, dt, true);
     drawSparks(dt);
+    drawFireworks();
 
     // 合成 + 泛光
     ctx.drawImage(pC, 0, 0, W, H);
@@ -1358,12 +1569,12 @@
     bX.drawImage(pC, 0, 0, BW, BH);
     ctx.globalCompositeOperation = "lighter";
     if (MOBILE) {
-      ctx.globalAlpha = 0.30;
+      ctx.globalAlpha = 0.24;
       ctx.drawImage(bC, -W * 0.04, -H * 0.04, W * 1.08, H * 1.08);
     } else {
-      ctx.globalAlpha = 0.26;
+      ctx.globalAlpha = 0.20;
       ctx.drawImage(bC, 0, 0, W, H);
-      ctx.globalAlpha = 0.095;
+      ctx.globalAlpha = 0.072;
       ctx.drawImage(bC, -W * 0.06, -H * 0.06, W * 1.12, H * 1.12);
     }
     ctx.globalAlpha = 1;
@@ -1576,6 +1787,17 @@
     if (hint && !hint.classList.contains("gone")) hint.classList.add("gone");
     bgmPlay();               // 第一次交互时起播（浏览器允许）
   });
+  if (wishGo) wishGo.addEventListener("click", function (ev) {
+    ev.stopPropagation(); ev.preventDefault(); wishSubmit();
+  });
+  if (wishIn) wishIn.addEventListener("keydown", function (ev) {
+    if (ev.key === "Enter" || ev.keyCode === 13) { ev.preventDefault(); wishSubmit(); }
+  });
+  if (wishBox) wishBox.addEventListener("pointerdown", function (ev) {
+    ev.stopPropagation();
+    bgmPlay();
+  });
+
   document.addEventListener("visibilitychange", function () {
     if (!document.hidden) last = performance.now();
   });
